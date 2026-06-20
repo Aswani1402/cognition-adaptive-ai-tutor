@@ -108,3 +108,29 @@ If demo data is included, it should be small, anonymized, and safe.
 ## Status
 
 Reviewer/developer evidence component for a research prototype. It supports transparency, traceability, and demonstration of module integration.
+
+## Reviewer Questions
+
+### What problem does this solve?
+
+The developer demo helps reviewers see what the adaptive tutor is doing internally. It makes module outputs, fallbacks, evidence labels, traces, and reports visible instead of requiring someone to inspect code manually.
+
+### Can someone run it?
+
+Yes, it can be run locally with Streamlit after installing dependencies. For live API status and real interaction traces, the backend should be running first.
+
+### What did I build?
+
+A reviewer-facing Streamlit dashboard that displays adaptive tutor evidence such as learner state, assessment results, behaviour signals, RAG context, generation source, validation/fallback status, policy decisions, rewards, XAI, and evaluation summaries.
+
+### What is completed?
+
+The demo folder, Streamlit app, multipage structure, API/data helpers, run instructions, and reviewer evidence explanation are organized for local inspection.
+
+### What is still limited?
+
+The demo depends on available backend endpoints, local databases, and selected artifacts. It should not fabricate missing outputs; unavailable data should remain clearly labelled as unavailable, fallback, or warning.
+
+### Why should a recruiter care?
+
+This component shows engineering maturity: observability, reviewer transparency, traceability, and the ability to explain how an AI system behaves rather than only showing a polished UI.

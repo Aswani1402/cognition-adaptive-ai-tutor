@@ -289,6 +289,32 @@ Research prototype / final-year project.
 
 The repository demonstrates an integrated cognition-adaptive tutoring framework with learner modelling, grounded generation, safe decision support, memory, revision, rewards, XAI, and runtime evidence.
 
+## Reviewer Questions
+
+### What problem does this solve?
+
+Most learning apps show the same path to every learner. This project solves that by adapting learning flow using mastery, behaviour, mistakes, concept dependencies, answer quality, revision needs, and safe content-generation evidence.
+
+### Can someone run it?
+
+Yes, the project can be run locally in parts: backend API, frontend UI, and developer demo. Large datasets, model checkpoints, runtime databases, and private/generated artifacts are intentionally excluded, so some ML experiments may require regenerating artifacts or placing local files manually.
+
+### What did I build?
+
+An integrated cognition-adaptive tutoring system with FastAPI backend services, React learner UI, Streamlit developer evidence dashboard, CogniTutorLM from-scratch experiments, fine-tuning comparison work, RAG-grounded guarded generation, safe policy/RL support, notebook memory, revision, rewards, and XAI reporting.
+
+### What is completed?
+
+The repository structure, core source modules, local run documentation, module READMEs, GitHub-safe `.gitignore`, learner UI, backend API structure, developer evidence dashboard, and experiment/reporting scripts are organized into one reviewable project.
+
+### What is still limited?
+
+This is an academic prototype, not a production deployment. Some model outputs depend on excluded checkpoints, generated datasets, or local runtime artifacts. Evaluation evidence is project-level and internal; it should not be presented as real-world learning-gain proof without a formal user study.
+
+### Why should a recruiter care?
+
+This project shows end-to-end engineering across backend APIs, frontend integration, ML/NLP experimentation, RAG, model validation, safety-aware decision support, documentation, GitHub hygiene, and honest evidence reporting. It demonstrates the ability to turn a complex AI idea into a structured, reviewable software system.
+
 ## Authors
 
 - Aswani A J

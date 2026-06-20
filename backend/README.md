@@ -205,3 +205,29 @@ If a small sample database is required for demo, document it clearly and avoid i
 ## Backend Status
 
 Research prototype backend for an integrated cognition-adaptive tutoring framework. It is intended to demonstrate module integration, adaptive decision support, guarded generation, and runtime evidence. It is not yet a production deployment.
+
+## Reviewer Questions
+
+### What problem does this solve?
+
+The backend turns learner actions into adaptive tutoring decisions instead of returning fixed content. It coordinates mastery, behaviour, answer evaluation, concept dependencies, RAG, policy/RL safety, revision, rewards, and explanation evidence.
+
+### Can someone run it?
+
+Yes, the backend can be run locally after installing the Python dependencies. Some endpoints may require the small demo databases or regenerated local artifacts; large runtime databases and trained models are intentionally not committed.
+
+### What did I build?
+
+A FastAPI-based tutoring backend with modular services for learner state, assessments, answer evaluation, adaptive pathing, behaviour evidence, RAG-grounded content, guarded generation, policy decisions, notebook/revision support, rewards, and XAI.
+
+### What is completed?
+
+The API structure, route modules, tutoring service modules, migration/evaluation scripts, small subject demo databases, setup instructions, and safety-focused ignore rules are in place.
+
+### What is still limited?
+
+It is not production hardened. Some model-backed paths depend on ignored artifacts, local databases, or generated evaluation files. Authentication, deployment, data privacy hardening, and formal load/security testing would need more work before real deployment.
+
+### Why should a recruiter care?
+
+The backend shows practical system design: API orchestration, database-backed learning state, ML service integration, safe fallback handling, evaluation scripting, and clear separation between runtime code and generated artifacts.

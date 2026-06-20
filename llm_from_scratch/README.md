@@ -137,3 +137,29 @@ If small sample files are useful, keep them small and clearly documented.
 ## Status
 
 Research and integration component for tutor-specific generation. It demonstrates from-scratch language model learning and safe integration with RAG and validation. It is not claimed as a production-grade LLM.
+
+## Reviewer Questions
+
+### What problem does this solve?
+
+This module explores whether a small tutor-specific language model can generate educational content, while avoiding unsafe direct use through RAG grounding, validation, and fallback.
+
+### Can someone run it?
+
+Some scripts can run locally after installing Python dependencies. Full training or reproduction may require datasets, tokenizer artifacts, checkpoints, or generated outputs that are intentionally excluded from GitHub because they are large.
+
+### What did I build?
+
+A CogniTutorLM experiment track with from-scratch model code, tokenizer/training scripts, generation scripts, guarded output validation, RAG connector logic, safe code runner support, and evaluation/reporting utilities.
+
+### What is completed?
+
+The source code, script structure, run documentation, integration explanation, and safety notes are organized. The module documents how raw model output is treated as a candidate and validated before learner-facing use.
+
+### What is still limited?
+
+The model is not a commercial-scale LLM and should not be treated as production-ready. Reproducing full results may need ignored datasets/checkpoints. Guarded success means the pipeline produced safe output, not that raw model output was always correct.
+
+### Why should a recruiter care?
+
+This module shows ML engineering curiosity beyond API usage: model training structure, generation validation, RAG grounding, artifact management, and honest reporting about model limitations.

@@ -139,3 +139,29 @@ build/
 ## Frontend Status
 
 Research prototype learner interface for demonstrating the adaptive tutoring workflow. It is intended for project review, demonstration, and integration testing. It is not claimed as a production learning platform.
+
+## Reviewer Questions
+
+### What problem does this solve?
+
+The frontend makes the adaptive tutor usable by learners and reviewers. It exposes subject selection, guided lessons, assessments, feedback, doubts, notebook/revision support, rewards, and explanation screens instead of leaving the intelligence hidden in backend scripts.
+
+### Can someone run it?
+
+Yes, the frontend can be run locally with Node.js and `npm install`, then `npm run dev`. For full behaviour, the backend should also be running at the configured API URL.
+
+### What did I build?
+
+A React/Vite learner-facing interface that connects to backend APIs and presents adaptive learning flows, assessment rendering, feedback, progress, notebook memory, reward views, tutor chat/doubt support, and reviewer evidence pages.
+
+### What is completed?
+
+The UI source structure, page components, API integration layer, run/build scripts, frontend README, and GitHub-safe ignore rules for `node_modules`, `.env.local`, build folders, and test output are in place.
+
+### What is still limited?
+
+The UI is a prototype and depends on backend availability for live adaptive behaviour. Production deployment, accessibility hardening, cross-browser QA, and real user validation are future work.
+
+### Why should a recruiter care?
+
+The frontend shows product thinking and integration ability: it turns ML/backend decisions into a usable interface, handles multiple learning workflows, and demonstrates React/TypeScript project organization.

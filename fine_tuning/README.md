@@ -113,3 +113,29 @@ If a small sample dataset is included, ensure it does not contain private learne
 ## Status
 
 Research comparison component. This folder supports experimentation and reporting, not the primary runtime path unless explicitly connected through the backend.
+
+## Reviewer Questions
+
+### What problem does this solve?
+
+This module compares pretrained/fine-tuned generation against CogniTutorLM, RAG-grounded content, and validated fallback so the project can evaluate generation quality instead of assuming one model path is best.
+
+### Can someone run it?
+
+Some inspection and comparison scripts can run locally after installing the required ML dependencies. Full inference or fine-tuning may require base models, LoRA adapters, checkpoints, or datasets that are intentionally not committed.
+
+### What did I build?
+
+A fine-tuning and comparison workspace with scripts for LoRA-style training, inference checks, generated-output comparison, validation, human-evaluation preparation, and report generation.
+
+### What is completed?
+
+The experiment structure, comparison scripts, README, safety guidance, and artifact-ignore rules are in place. The module clearly separates research comparison from the main learner-facing runtime.
+
+### What is still limited?
+
+Local full-model execution may not work without external model files. Results should be treated as experimental evidence, not production validation. Private human-evaluation mappings and large artifacts are excluded.
+
+### Why should a recruiter care?
+
+This folder shows the ability to evaluate AI choices critically: comparing pretrained/fine-tuned generation, checking grounding/schema quality, managing model artifacts, and documenting limitations instead of making unsupported claims.
