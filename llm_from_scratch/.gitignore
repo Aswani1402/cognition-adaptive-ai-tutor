@@ -1,0 +1,24 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Training outputs
+outputs/checkpoints/
+outputs/metrics/train_log.jsonl
+
+# Large/raw data
+data/raw/
+data/tokenizer/*.model
+data/tokenizer/*.vocab
+data/tokenizer/tokenizer_training_text.txt
+
+# Optional generated splits/processed dataset
+data/processed/
+data/splits/
+
+# IDE/system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

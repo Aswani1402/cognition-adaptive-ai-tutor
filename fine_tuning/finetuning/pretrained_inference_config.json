@@ -1,0 +1,10 @@
+{
+  "base_model_path": "",
+  "adapter_path": "models/llm_finetuned/smollm2_135m_lora",
+  "merged_model_path": "models/llm_finetuned/merged_model",
+  "device": "auto",
+  "local_files_only": true,
+  "max_new_tokens": 160,
+  "temperature": 0.2,
+  "do_sample": false
+}

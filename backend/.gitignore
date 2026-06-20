@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs / runtime output
+*.log
+output.txt
+integrated_tutor_output_*.json
+outputs/
+runs/
+cache/
+tmp/
+
+# Generated evaluation outputs
+evaluation_outputs/
+
+# Trained models / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+models/
+checkpoints/
+
+# Databases - do not push runtime DBs unless intentionally needed
+*.db
+*.sqlite
+*.sqlite3
+external/core_data/*.db
+rag_dyna/core_data/*.db
+!external/
+!external/core_data/
+!external/core_data/python_learning.db
+!external/core_data/html_web_basics.db
+!external/core_data/database_sql.db
+!external/core_data/git_version_control.db
+!external/core_data/data_structures.db
+
+# Temporary copied package / duplicate RAG package
+rag_dyna/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.env

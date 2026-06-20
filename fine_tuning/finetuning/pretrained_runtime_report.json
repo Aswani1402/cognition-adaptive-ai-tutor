@@ -1,0 +1,143 @@
+{
+  "checkpoint_folders": [
+    {
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "optimizer.pt",
+        "rng_state.pth",
+        "scheduler.pt",
+        "trainer_state.json",
+        "training_args.bin"
+      ],
+      "path": "models/llm_finetuned/qwen_coder_05b_lora/checkpoint-20"
+    },
+    {
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "optimizer.pt",
+        "rng_state.pth",
+        "scheduler.pt",
+        "trainer_state.json",
+        "training_args.bin"
+      ],
+      "path": "models/llm_finetuned/smollm2_135m_lora/checkpoint-20"
+    }
+  ],
+  "dataset_files": [
+    "training_data/llm_tutor/tutor_test.jsonl",
+    "training_data/llm_tutor/tutor_train.jsonl",
+    "training_data/llm_tutor/tutor_val.jsonl"
+  ],
+  "exact_next_step_needed": "Place the matching base model folder locally and set base_model_path in pretrained_inference_config.json, or create a merged full model folder at merged_model_path.",
+  "folder_exists": true,
+  "full_local_base_model_folders": [],
+  "generated_at_utc": "2026-05-11T17:27:10.579566+00:00",
+  "inference_runnable": false,
+  "inference_scripts": [
+    "cogni_lm/generate.py",
+    "scripts/run_pretrained_local_inference.py",
+    "tutor/llm_finetune/generate_samples.py",
+    "tutor/llm_finetune/generate_test.py",
+    "tutor/llm_finetune/model_loader.py",
+    "tutor/llm_finetune/pretrained_generator.py"
+  ],
+  "lora_adapter_folders": [
+    {
+      "base_model_name_or_path": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "added_tokens.json",
+        "merges.txt",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "vocab.json"
+      ],
+      "path": "models/llm_finetuned/qwen_coder_05b_lora"
+    },
+    {
+      "base_model_name_or_path": "Qwen/Qwen2.5-Coder-0.5B-Instruct",
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "optimizer.pt",
+        "rng_state.pth",
+        "scheduler.pt",
+        "trainer_state.json",
+        "training_args.bin"
+      ],
+      "path": "models/llm_finetuned/qwen_coder_05b_lora/checkpoint-20"
+    },
+    {
+      "base_model_name_or_path": "HuggingFaceTB/SmolLM2-135M",
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "merges.txt",
+        "special_tokens_map.json",
+        "tokenizer.json",
+        "tokenizer_config.json",
+        "vocab.json"
+      ],
+      "path": "models/llm_finetuned/smollm2_135m_lora"
+    },
+    {
+      "base_model_name_or_path": "HuggingFaceTB/SmolLM2-135M",
+      "files": [
+        "README.md",
+        "adapter_config.json",
+        "adapter_model.safetensors",
+        "optimizer.pt",
+        "rng_state.pth",
+        "scheduler.pt",
+        "trainer_state.json",
+        "training_args.bin"
+      ],
+      "path": "models/llm_finetuned/smollm2_135m_lora/checkpoint-20"
+    }
+  ],
+  "merged_model_folders": [],
+  "model_loader_files": [
+    "tutor/llm_finetune/model_loader.py",
+    "tutor/llm_finetune/pretrained_generator.py"
+  ],
+  "module": "inspect_pretrained_finetune",
+  "next_step": "Place the matching base model folder locally and set base_model_path in pretrained_inference_config.json, or create a merged full model folder at merged_model_path.",
+  "project_root": "C:\\Users\\Aswini_Ayappan\\PycharmProjects\\PythonProject\\fine_tuing_llm\\pretrained_finetuning",
+  "reason": "base_model_path_missing_or_invalid",
+  "required_files_for_base_model": [
+    "config.json",
+    "tokenizer.json or tokenizer.model",
+    "tokenizer_config.json",
+    "model.safetensors or pytorch_model.bin"
+  ],
+  "requirements_files": [],
+  "runtime_inference_check": {
+    "adapter_loaded": false,
+    "adapter_path": "models/llm_finetuned/smollm2_135m_lora",
+    "available": false,
+    "base_model_path": "",
+    "latency_ms": 0.0,
+    "limitations": [
+      "External downloads are disabled.",
+      "Required base model files: config.json, tokenizer.json or tokenizer.model, tokenizer_config.json, model.safetensors or pytorch_model.bin."
+    ],
+    "merged_model_path": "models/llm_finetuned/merged_model",
+    "message": "LoRA adapter exists but matching local base model folder is required for inference.",
+    "model_loaded": false,
+    "output": "",
+    "reason": "base_model_path_missing_or_invalid",
+    "service": "pretrained_pretrained_finetuned_llm",
+    "status": "warning"
+  },
+  "status": "warning",
+  "what_is_missing": "A complete matching local base model folder or merged model folder."
+}

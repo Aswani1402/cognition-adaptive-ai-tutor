@@ -1,0 +1,140 @@
+# Python
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+private/
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.vite/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs / temp
+*.log
+*.tmp
+*.temp
+
+# Databases and runtime data
+*.sqlite
+*.sqlite3
+*.db
+*.db-shm
+*.db-wal
+
+# Model artifacts
+*.pt
+*.pth
+*.h5
+*.keras
+*.onnx
+*.pkl
+*.joblib
+*.bin
+*.safetensors
+
+# ML / experiment outputs
+checkpoints/
+model_artifacts/
+outputs/
+runs/
+wandb/
+mlruns/
+
+# Datasets / large local resources
+data/
+dataset/
+datasets/
+large_datasets/
+external/
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Reports that may be generated locally
+generated_reports/
+local_reports/
+
+# Project-specific generated folders and safety rules
+**/__pycache__/
+coverage/
+test-results/
+playwright-report/
+training_data/
+evaluation_outputs/
+**/evaluation_outputs/
+models/
+**/models/
+**/checkpoints/
+**/outputs/
+
+# Additional secret/key patterns
+*.pem
+*.key
+*.secret
+*secret*
+*credentials*
+*credential*
+*token*
+
+# Tokenizer/model artifacts
+*.model
+*.vocab
+
+# Nested repository metadata preserved from the original separate projects
+**/.git/
+.git_backup/
+**/.git_backup/
+.git_legacy_backup/
+**/.git_legacy_backup/
+
+# Backups and stale README/template files preserved during cleanup
+.gitignore.codex_backup*
+README_legacy.md
+**/README_legacy.md
+README.codex_backup_*.md
+**/README.codex_backup_*.md
+*_README.md
+GITIGNORE_TEMPLATE.txt
+**/README.md.py
+frontend/KP-UI/README.md
+
+# Allow small subject-demo content databases only if intentionally staged.
+!backend/external/
+!backend/external/core_data/
+!backend/external/core_data/python_learning.db
+!backend/external/core_data/html_web_basics.db
+!backend/external/core_data/database_sql.db
+!backend/external/core_data/git_version_control.db
+!backend/external/core_data/data_structures.db

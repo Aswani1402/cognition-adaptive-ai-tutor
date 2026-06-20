@@ -1,0 +1,785 @@
+Work in:
+C:\Users\Aswini_Ayappan\PycharmProjects\PythonProject\CogniTutor_LM_from_scratch
+
+STRICT RULES — never break these:
+- Do NOT use any external API (no OpenAI, no Claude, no Gemini)
+- Do NOT use any pretrained model
+- Do NOT touch unrelated projects
+- Do NOT delete existing stable outputs in outputs/model_generated/structured_model_generated_core.json
+- Do NOT auto-commit to git
+- Keep existing 456 core outputs safe as baseline
+- Print all results and run all scripts to completion
+- After every script, print DONE: <script name> so progress is visible
+
+====================================================================
+PHASE 0 — READ CONCEPT RESOURCES FROM ALL 5 SUBJECT DATABASES
+====================================================================
+
+Before generating ANYTHING, read all concept data from the 5 subject SQLite databases:
+
+    cognition_adaptive_AI_tutor/external/core_data/python_learning.db
+    cognition_adaptive_AI_tutor/external/core_data/database_sql.db
+    cognition_adaptive_AI_tutor/external/core_data/html_web_basics.db
+    cognition_adaptive_AI_tutor/external/core_data/git_version_control.db
+    cognition_adaptive_AI_tutor/external/core_data/data_structures.db
+
+From each database, read the concept_resources table. Extract ALL of these columns for every concept:
+
+    concept_id
+    topic / concept_name (use whichever column name exists)
+    base_content / definition (use whichever exists)
+    examples
+    key_points
+    misconceptions
+    real_world_use
+    next_concept_link (if exists)
+
+Store all 38 concepts across all 5 subjects in memory as a dict:
+    all_concepts[domain][concept_id] = {full concept_resources row}
+
+Print a summary table after loading:
+    Domain | concept_id | concept_name | has_definition | has_examples | has_key_points | has_misconceptions | has_real_world_use
+
+concept_resources is the ONLY knowledge source. Do not introduce unrelated facts or external content. You may expand, rephrase, structure, simplify, and create examples/analogies only when they are clearly grounded in concept_resources fields: base_content, examples, key_points, misconceptions, real_world_use, and next_concept_link. Every output must record which concept_resources fields were used.
+Use this product-level 89-task taxonomy for the full product generator.
+====================================================================
+PHASE 1 — CREATE CONFIG
+====================================================================
+
+Create: src/cognitutor_lm_config.py
+
+Content must include:
+
+ROOT = Path(__file__).resolve().parent.parent
+
+MAIN_PROJECT = ROOT.parent / "cognition_adaptive_AI_tutor"
+DB_DIR = MAIN_PROJECT / "external" / "core_data"
+
+SUBJECT_DBS = {
+    "Python": DB_DIR / "python_learning.db",
+    "SQL": DB_DIR / "database_sql.db",
+    "HTML": DB_DIR / "html_web_basics.db",
+    "Git": DB_DIR / "git_version_control.db",
+    "Data Structures": DB_DIR / "data_structures.db",
+}
+MODEL_CHECKPOINT   = ROOT / "models/cognitutor_lm_structured_generation/best_model.pt"
+CORE_OUTPUT        = ROOT / "outputs/model_generated/structured_model_generated_core.json"
+PACKET_OUTPUT      = ROOT / "outputs/learning_packets/all_learning_packets.json"
+ALL_TASK_OUTPUT    = ROOT / "outputs/model_generated/structured_model_generated_all_tasks.json"
+BY_SUBJECT_DIR     = ROOT / "outputs/model_generated/by_subject"
+BY_CONCEPT_DIR     = ROOT / "outputs/model_generated/by_concept"
+REPORTS_DIR        = ROOT / "outputs/final_reports"
+PACKETS_DIR        = ROOT / "outputs/learning_packets"
+
+TEACHING_VIEWS = [
+    "definition_view",
+    "simple_example_view",
+    "step_by_step_view",
+    "analogy_view",
+    "code_view",
+    "debug_view",
+    "output_prediction_view",
+    "misconception_view",
+    "transfer_view",
+    "challenge_view",
+    "revision_view",
+    "flashcard_view",
+    "mindmap_view",
+    "voice_script_view",
+]
+
+DIFFICULTIES = ["easy", "medium", "hard", "revision"]
+
+CORE_TASK_TYPES = [
+    "explanation", "flashcard", "mcq", "debug_task", "output_prediction",
+    "challenge_question", "revision_summary", "hint", "feedback",
+    "mindmap", "doubt_answer", "voice_script",
+]
+
+ALL_89_TASK_TYPES = [
+    "explanation", "simple_explanation", "beginner_explanation",
+    "definition_view", "analogy_explanation", "step_by_step_explanation",
+    "code_walkthrough", "real_world_explanation", "misconception_explanation",
+    "mcq_easy", "mcq_medium", "mcq_hard",
+    "fill_in_the_blank", "true_or_false", "syntax_completion",
+    "output_prediction", "output_prediction_medium", "output_prediction_hard",
+    "debug_task", "debug_task_medium", "debug_task_hard",
+    "code_fix_task", "spot_the_error",
+    "challenge_question", "multi_step_challenge", "real_world_challenge",
+    "transfer_question", "transfer_application",
+    "hint_easy", "hint_medium", "hint_hard",
+    "feedback_correct", "feedback_partial", "feedback_wrong",
+    "flashcard_concept", "flashcard_syntax", "flashcard_debug",
+    "mindmap", "concept_map",
+    "revision_summary", "revision_plan", "personal_revision_plan",
+    "weakness_review", "daily_review", "comeback_summary",
+    "notebook_summary", "mistake_summary",
+    "doubt_answer", "faq_answer",
+    "voice_script", "concept_intro_voice_script", "teaching_voice_script",
+    "quick_check", "exit_ticket",
+    "definition_check", "keyword_match", "concept_recall",
+    "code_reading_task", "code_reasoning_task", "code_completion_task",
+    "analogy_task", "analogy_check",
+    "order_the_steps", "match_the_pairs",
+    "short_answer", "explain_in_own_words",
+    "compare_concepts", "contrast_task",
+    "teaching_view_definition", "teaching_view_example",
+    "teaching_view_code", "teaching_view_debug",
+    "teaching_view_analogy", "teaching_view_misconception",
+    "teaching_view_step_by_step", "teaching_view_output_prediction",
+    "teaching_view_transfer", "teaching_view_challenge",
+    "teaching_view_revision", "teaching_view_flashcard",
+    "teaching_view_mindmap", "teaching_view_voice_script",
+    "session_intro", "session_summary", "next_step_recommendation",
+    "spaced_repetition_card", "interleaved_practice",
+]
+
+====================================================================
+PHASE 2 — CREATE MAIN RUNNER
+====================================================================
+
+Create: src/cognitutor_lm_main.py
+
+It must support these modes via argparse:
+
+    python -m src.cognitutor_lm_main --mode status
+    python -m src.cognitutor_lm_main --mode list-concepts
+    python -m src.cognitutor_lm_main --mode generate-packets
+    python -m src.cognitutor_lm_main --mode generate-all-89
+    python -m src.cognitutor_lm_main --mode preview --domain "Python" --concept "Variables"
+    python -m src.cognitutor_lm_main --mode evaluate
+    python -m src.cognitutor_lm_main --mode smoke-test
+
+--mode status must print:
+    [ ] or [x] Model checkpoint exists
+    [ ] or [x] Core 456 outputs exist
+    [ ] or [x] Learning packets generated
+    [ ] or [x] All-89 outputs generated
+    Concept count, task type count, packet count
+
+====================================================================
+PHASE 3 — GENERATE RICH LEARNING PACKETS
+====================================================================
+
+Create: scripts/generate_teaching_aligned_packets.py
+
+This is the MOST IMPORTANT script. Read this carefully.
+
+CONTENT RULE:
+Every single field in every packet MUST use the ACTUAL TEXT
+fetched from concept_resources. Do not produce placeholder text.
+Do not produce one-line content. Do not write "..." or "N/A".
+If a field is missing from the DB, derive it from base_content.
+
+For every concept, for every teaching_view, generate a full packet.
+That means 38 concepts × 14 teaching_views = 532 packets minimum.
+
+Each packet JSON must follow this exact structure:
+
+{
+  "packet_id": "<domain>_<concept_id>_<teaching_view>",
+  "domain": "Python",
+  "concept_id": "P1",
+  "concept_name": "Variables",
+  "difficulty": "easy",
+  "teaching_view": "definition_view",
+
+  "teaching_content": {
+    "title": "<concept_name> — <teaching_view label>",
+
+    "beginner_explanation": "
+      A full paragraph (at least 4 sentences) explaining this concept
+      at a beginner level using real words from base_content.
+      No bullet points here. Full natural language explanation.
+      Example: 'In Python, a variable is like a labelled box that stores
+      a value. When you write x = 5, you are telling Python to create
+      a box named x and put the number 5 inside it. You can open that
+      box later, change what is inside, or use the value in a calculation.
+      Variables make your code flexible because the same logic works with
+      different values just by changing what the variable holds.'
+    ",
+
+    "definition": "
+      The exact definition from the DB base_content field, expanded
+      into 2-3 full sentences if the DB value is short.
+      Must not be one line only.
+    ",
+
+    "why_it_matters": "
+      2-3 sentences from real_world_use DB field explaining
+      why this concept matters in practice.
+    ",
+
+    "step_by_step": [
+      "Step 1: <concrete step using concept text>",
+      "Step 2: <concrete step>",
+      "Step 3: <concrete step>",
+      "Step 4: verify or use the result"
+    ],
+
+    "example": "
+      A concrete example using actual examples from the DB examples field.
+      If it is code, write the code block as a string with newlines.
+      If it is non-code, write a full sentence example.
+      Must be a real example, not generic placeholder.
+    ",
+
+    "code_or_task_example": "
+      A short runnable code snippet (for code-capable concepts)
+      OR a written task description (for non-code concepts).
+      Derived from DB examples field.
+    ",
+
+    "common_mistake": "
+      One real misconception from the DB misconceptions field,
+      written as: 'Many learners think X but actually Y because Z.'
+      Must use the actual misconception text from the DB.
+    ",
+
+    "real_world_use": "
+      1-2 sentences from DB real_world_use field.
+      Must be specific to this concept, not generic.
+    ",
+
+    "key_points_used": [
+      "<key point 1 from DB key_points field>",
+      "<key point 2 from DB key_points field>",
+      "<key point 3 if available>"
+    ],
+
+    "misconceptions_used": [
+      "<misconception 1 from DB misconceptions field>",
+      "<misconception 2 if available>"
+    ],
+
+    "quick_check": "
+      One question the learner can ask themselves to verify
+      they understood this teaching view.
+      Example: 'Can you write a variable assignment from memory
+      without looking at the notes?'
+    ",
+
+    "revision_line": "
+      One summary sentence that captures the core idea.
+      Example: 'A variable stores a named value that can be
+      read and changed throughout your program.'
+    "
+  },
+
+  "aligned_assessments": [
+    {
+      "task_type": "mcq",
+      "question": "<question that directly tests what was taught in teaching_content>",
+      "options": [
+        "A) <correct answer derived from teaching_content>",
+        "B) <plausible distractor from misconceptions>",
+        "C) <plausible distractor>",
+        "D) <plausible distractor>"
+      ],
+      "answer": "A",
+      "explanation": "
+        2-3 sentences explaining why A is correct
+        and why the distractors are wrong.
+        Must reference the teaching_content taught above.
+      ",
+      "alignment_reason": "
+        This MCQ tests the exact definition shown in definition_view.
+        The distractors are derived from the concept's known misconceptions.
+      "
+    },
+    {
+      "task_type": "fill_in_the_blank",
+      "question": "<sentence with one blank using concept vocabulary>",
+      "answer": "<exact word or phrase that fills the blank>",
+      "explanation": "<why this answer is correct>",
+      "alignment_reason": "Tests recall of the key term introduced in this view."
+    }
+  ],
+
+  "hint": "
+    A useful hint that guides without giving the full answer.
+    Must be specific to this concept and teaching_view.
+    Not a generic 'think about it' line.
+    Example: 'Remember that a variable name cannot start with a number.
+    Try writing the assignment again and check if the name is valid.'
+  ",
+
+  "feedback_template": {
+    "correct": "
+      Positive feedback + one extension thought.
+      Example: 'Correct! You understood that x = 5 assigns the integer 5
+      to variable x. Now try changing x to a string and see what happens.'
+    ",
+    "partial": "
+      Acknowledge what they got right + what to review.
+      Example: 'You got the assignment syntax right but mixed up
+      integer and string types. Go back to the type section above.'
+    ",
+    "wrong": "
+      Non-discouraging correction + specific pointer back to content.
+      Example: 'Not quite. Remember that = in Python means assignment,
+      not equality. Re-read the definition section above.'
+    "
+  },
+
+  "revision_summary": "
+    3-5 sentences summarising everything taught in this packet.
+    Must cover: definition, example, common mistake, real-world use.
+    Written as a compact review paragraph, not bullet points.
+  ",
+
+  "next_step": "
+    One sentence recommending what the learner should do next.
+    Must reference next_concept_link from DB if available.
+    Example: 'Now that you understand Variables, move on to
+    Data Types to learn what kinds of values a variable can hold.'
+  "
+}
+
+TEACHING VIEW RULES:
+Each teaching_view must produce different teaching_content emphasis:
+
+definition_view:
+  - beginner_explanation focuses on: what is this concept, plain English definition
+  - aligned_assessments: mcq testing definition, fill_in_the_blank on key term
+  - difficulty: easy
+
+simple_example_view:
+  - beginner_explanation focuses on: walk through the example step by step
+  - Use the actual example from DB examples field as the centrepiece
+  - aligned_assessments: output_prediction or mcq based on that exact example
+  - difficulty: easy
+
+step_by_step_view:
+  - beginner_explanation focuses on: numbered steps to use this concept
+  - step_by_step list must have 4+ actual steps derived from DB content
+  - aligned_assessments: order_the_steps or mcq about which step comes first
+  - difficulty: easy-medium
+
+analogy_view:
+  - beginner_explanation focuses on: a real-life analogy for this concept
+  - The analogy must be specific, not generic (not just 'like a box')
+  - aligned_assessments: analogy_check mcq
+  - difficulty: easy
+
+code_view:
+  - beginner_explanation focuses on: reading and writing the actual code
+  - code_or_task_example must contain a runnable code block from DB
+  - aligned_assessments: output_prediction, code_completion_task
+  - difficulty: medium
+
+debug_view:
+  - beginner_explanation focuses on: what goes wrong with this concept and why
+  - common_mistake must come from DB misconceptions field
+  - code_or_task_example must show a BUGGY version then the FIXED version
+  - aligned_assessments: debug_task, spot_the_error
+  - difficulty: medium
+
+output_prediction_view:
+  - beginner_explanation focuses on: tracing through code/logic to predict output
+  - code_or_task_example must show code and ask what happens when run
+  - aligned_assessments: output_prediction with exact answer from DB examples
+  - difficulty: medium
+
+misconception_view:
+  - beginner_explanation focuses on: correcting the most common wrong belief
+  - Use EVERY misconception from DB misconceptions field
+  - aligned_assessments: true_or_false on the misconception, mcq where wrong option is the misconception
+  - difficulty: medium
+
+transfer_view:
+  - beginner_explanation focuses on: how this concept applies in a different context
+  - Use real_world_use from DB as the transfer scenario
+  - aligned_assessments: transfer_question, short_answer
+  - difficulty: hard
+
+challenge_view:
+  - beginner_explanation focuses on: pushing beyond basics to a harder use case
+  - aligned_assessments: challenge_question, multi_step_challenge
+  - difficulty: hard
+
+revision_view:
+  - teaching_content is a revision of ALL the above views
+  - Must include definition + example + mistake + real-world use in one packet
+  - aligned_assessments: mcq from each sub-topic, flashcard_concept
+  - difficulty: revision
+
+flashcard_view:
+  - teaching_content is condensed to front/back format
+  - Generate 5 flashcards per concept: definition, syntax, example, mistake, real-world
+  - Each flashcard: { "front": "...", "back": "..." }
+  - aligned_assessments: concept_recall, keyword_match
+  - difficulty: revision
+
+mindmap_view:
+  - teaching_content describes the concept as a mindmap structure
+  - mindmap field: { "centre": "concept_name", "branches": [ { "label": "...", "children": [...] } ] }
+  - Branches: Definition, Examples, Key Points, Common Mistakes, Real-World Use, Next Steps
+  - Each branch must have 2-4 children from DB content
+  - difficulty: revision
+
+voice_script_view:
+  - teaching_content is written as a natural spoken script
+  - beginner_explanation must read like a teacher speaking out loud
+  - No bullet points in this view. Full spoken paragraphs only.
+  - Example style: "Today we are going to talk about Variables in Python.
+    Think of a variable like a named box. You put something in the box,
+    give it a name, and any time you need it, you just call the name..."
+  - aligned_assessments: quick_check spoken as a question
+  - difficulty: easy-medium
+
+
+====================================================================
+PHASE 4 — GENERATE ALL 89 TASK OUTPUTS
+====================================================================
+
+Create: scripts/generate_all_89_task_outputs.py
+
+Support args:
+    --domain "Python" --concept "Variables"
+    --all-concepts
+
+For every concept, generate all 89 task types from ALL_89_TASK_TYPES list.
+Every task output must pull content from concept_resources.
+
+Each output item:
+{
+  "domain": "Python",
+  "concept_id": "P1",
+  "concept_name": "Variables",
+  "task_type": "mcq_easy",
+  "task_family": "assessment",
+  "difficulty": "easy",
+  "teaching_view": "definition_view",
+  "output": {
+    ... (task-specific fields)
+  },
+  "linked_packet_id": "Python_P1_definition_view",
+  "alignment_reason": "...",
+  "valid": true,
+  "quality_score": 1.0,
+  "issues": [],
+  "fallback_applied": true,
+  "fallback_source": "concept_resources_guarded"
+}
+
+Save to:
+    outputs/model_generated/structured_model_generated_all_tasks.json
+    outputs/model_generated/by_subject/<domain>.json
+    outputs/model_generated/by_subject/<domain>.md
+    outputs/model_generated/by_concept/<domain>_<concept_id>_<concept_name>.json
+
+====================================================================
+PHASE 5 — PEDAGOGICAL QUALITY EVALUATOR
+====================================================================
+
+Create: scripts/evaluate_generation_pedagogical_quality.py
+
+Check every packet and every task output against these 20 rules:
+
+1.  concept_name appears in teaching_content
+2.  definition is not empty and more than 30 words
+3.  beginner_explanation is more than 60 words
+4.  step_by_step has at least 3 steps
+5.  example is not empty and is concept-specific (not generic)
+6.  common_mistake uses word from DB misconceptions
+7.  key_points_used is not empty list
+8.  aligned_assessment exists and is not empty
+9.  MCQ has exactly 4 options
+10. MCQ answer is one of A/B/C/D and appears in options
+11. fill_in_the_blank has blank marker and answer field
+12. debug_task has a buggy code block and expected fix
+13. output_prediction has code/example and expected_output
+14. hint is more than 15 words and does not give full answer
+15. feedback_template has correct + partial + wrong keys
+16. revision_summary is more than 40 words
+17. next_step references next_concept_link or a known concept name
+18. no field contains "..." or "N/A" or "placeholder" or "TODO"
+19. no field is a Python list printed as string (like "['item']")
+20. teaching_view is one of the 14 valid TEACHING_VIEWS
+
+Score each packet 0.0 to 1.0 (pass_count / 20).
+Flag any packet scoring below 0.85.
+
+Save:
+    outputs/final_reports/pedagogical_generation_quality_report.json
+    outputs/final_reports/pedagogical_generation_quality_report.md
+
+Print summary:
+    Total packets evaluated
+    Pass (score >= 0.85): X
+    Warn (score 0.70-0.84): X
+    Fail (score < 0.70): X
+    Top 3 failing rules
+
+====================================================================
+PHASE 6 — PREVIEW TOOLS
+====================================================================
+
+Create: scripts/preview_learning_packets.py
+
+Args: --domain "Python" --concept "Variables"
+
+Print to console in readable format:
+    === PACKET: Python / Variables / definition_view ===
+    TITLE: ...
+    BEGINNER EXPLANATION:
+      <full text>
+    DEFINITION: ...
+    WHY IT MATTERS: ...
+    STEP BY STEP:
+      1. ...
+      2. ...
+    EXAMPLE: ...
+    COMMON MISTAKE: ...
+    QUICK CHECK: ...
+    REVISION LINE: ...
+
+    --- ALIGNED ASSESSMENT 1 ---
+    Type: mcq
+    Question: ...
+    A) ...  B) ...  C) ...  D) ...
+    Answer: A
+    Explanation: ...
+    Alignment reason: ...
+
+    --- HINT ---
+    ...
+
+    --- FEEDBACK ---
+    Correct: ...
+    Partial: ...
+    Wrong: ...
+
+    --- REVISION SUMMARY ---
+    ...
+
+    --- NEXT STEP ---
+    ...
+
+    (repeat for all 14 teaching_views for this concept)
+
+Create: scripts/preview_concept_all_tasks.py
+
+Args: --domain "Python" --concept "Variables"
+
+Print all 89 task outputs for one concept in readable format.
+
+Create: scripts/preview_subject_generation.py
+
+Args: --domain "Python"
+
+Print a summary table of all concepts in that subject:
+    concept_id | concept_name | packets_generated | tasks_generated | avg_quality_score
+
+====================================================================
+PHASE 7 — API SERVICE
+====================================================================
+
+Create: src/cognitutor_lm_api_service.py
+
+Functions:
+
+def get_available_subjects() -> list[str]
+def get_available_concepts(domain: str) -> list[dict]
+def get_learning_packet(domain, concept_name=None, concept_id=None,
+                        difficulty="easy", teaching_view="definition_view") -> dict
+def get_aligned_assessment(packet_id: str) -> list[dict]
+def get_all_task_outputs(domain: str, concept_name: str) -> list[dict]
+def get_website_session_packet(domain: str, concept: str,
+                                learner_id: str = None) -> dict
+
+get_website_session_packet must return:
+{
+  "status": "success",
+  "source": "CogniTutorLM_from_scratch",
+  "generation_mode": "guarded_concept_resources",
+  "raw_generation_status": "WARN",
+  "final_guarded_generation_status": "PASS",
+  "domain": "...",
+  "concept_id": "...",
+  "concept_name": "...",
+  "difficulty": "easy",
+  "teaching_view": "definition_view",
+  "teaching_content": { ... },
+  "aligned_assessments": [ ... ],
+  "hint": "...",
+  "feedback_template": { ... },
+  "revision_summary": "...",
+  "flashcard": { ... },
+  "mindmap": { ... },
+  "voice_script": "...",
+  "next_step": "...",
+  "metadata": {
+    "concept_count": 38,
+    "packet_count": 532,
+    "task_type_count": 89,
+    "core_valid_rate": 1.0,
+    "website_ready": true
+  }
+}
+
+====================================================================
+PHASE 8 — SMOKE TEST
+====================================================================
+
+Create: scripts/run_learning_packet_smoke_test.py
+
+Verify:
+- All 5 subject DBs are readable
+- All 38 concepts loaded with full concept_resources
+- Packets generated for all 38 concepts
+- Every concept has all 14 teaching_view packets
+- No packet has empty teaching_content fields
+- No packet has definition under 30 words
+- No packet has beginner_explanation under 60 words
+- No packet has "..." or "N/A" in any field
+- All MCQs have 4 options with valid answer key
+- All debug_tasks have buggy code and fix
+- All output_prediction tasks have expected_output
+- API service can return a session packet for each subject
+- Quality score >= 0.85 for at least 95% of packets
+
+Save:
+    outputs/final_reports/learning_packet_smoke_test.json
+    outputs/final_reports/learning_packet_smoke_test.md
+
+Print PASS or FAIL for each check.
+Print overall: SMOKE TEST PASSED or SMOKE TEST FAILED
+
+====================================================================
+PHASE 9 — FRONTEND CONTRACT DOCUMENT
+====================================================================
+
+Create: outputs/final_reports/frontend_cognitutor_lm_contract.md
+
+Content:
+
+# CogniTutorLM Frontend Contract
+
+## Source
+CogniTutorLM from scratch — no external API, no pretrained model.
+
+## Current generation status
+- core_valid_rate: 1.0
+- fallback_rate: 1.0
+- raw_generation_status: WARN
+- final_guarded_generation_status: PASS
+
+## Frontend request format
+{
+  "domain": "Python",
+  "concept": "Variables",
+  "difficulty": "easy",
+  "teaching_view": "definition_view",
+  "learner_id": "demo_learner_001"
+}
+
+## Frontend response format
+(show full get_website_session_packet structure)
+
+## Available domains
+Python, SQL, HTML, Git, Data Structures
+
+## Available teaching views
+(list all 14)
+
+## Available task types
+Core (12): (list)
+All tasks (89): (list from config)
+
+## Notes
+- Core mode: 12 validated task types, 456 outputs
+- Packet mode: 532 learning packets, 14 teaching views × 38 concepts
+- All-task mode: 89 task types × 38 concepts = 3382 outputs
+- Raw CogniTutorLM generation is experimental (WARN). Guarded generation used for website.
+
+====================================================================
+PHASE 10 — RUN EVERYTHING IN ORDER
+====================================================================
+
+Run these commands in order. After each one, print DONE: <name>.
+
+Step 1:
+    python -m src.cognitutor_lm_main --mode status
+
+Step 2:
+    python -m scripts.generate_teaching_aligned_packets
+
+Step 3:
+    python -m scripts.evaluate_generation_pedagogical_quality
+
+Step 4:
+    python -m scripts.preview_learning_packets --domain "Python" --concept "Variables"
+
+Step 5:
+    python -m scripts.preview_learning_packets --domain "Data Structures" --concept "Trees"
+
+Step 6:
+    python -m scripts.preview_learning_packets --domain "SQL" --concept "JOIN"
+
+Step 7:
+    python -m scripts.preview_learning_packets --domain "HTML" --concept "Forms"
+
+Step 8:
+    python -m scripts.preview_learning_packets --domain "Git" --concept "Branching"
+
+Step 9:
+    python -m scripts.generate_all_89_task_outputs --all-concepts
+
+Step 10:
+    python -m scripts.preview_concept_all_tasks --domain "Python" --concept "Variables"
+
+Step 11:
+    python -m scripts.preview_subject_generation --domain "Python"
+
+Step 12:
+    python -m scripts.preview_subject_generation --domain "Data Structures"
+
+Step 13:
+    python -m scripts.run_learning_packet_smoke_test
+
+Step 14:
+    python -m src.cognitutor_lm_main --mode status
+
+Step 15:
+    git status
+
+====================================================================
+FINAL STATUS PRINT
+====================================================================
+
+After all steps, print a final table:
+
+=== CogniTutorLM Full Product Generator Status ===
+
+Subjects loaded:          5 / 5
+Concepts loaded:          38 / 38
+Learning packets:         532 (38 × 14 teaching views)
+Task outputs (all-89):    3382 (38 × 89)
+Core outputs (stable):    456 (38 × 12)
+
+Packet quality (>= 0.85): X / 532
+Smoke test result:        PASS / FAIL
+
+Teaching views covered:   14 / 14
+Task types covered:       89 / 89
+
+Generation mode:          guarded_concept_resources
+Raw generation status:    WARN
+Website ready:            YES
+
+Output files:
+  outputs/learning_packets/all_learning_packets.json
+  outputs/model_generated/structured_model_generated_all_tasks.json
+  outputs/model_generated/by_subject/<domain>.json  (×5)
+  outputs/model_generated/by_concept/<domain>_<concept>.json  (×38)
+  outputs/final_reports/pedagogical_generation_quality_report.md
+  outputs/final_reports/learning_packet_smoke_test.md
+  outputs/final_reports/frontend_cognitutor_lm_contract.md
+
+Do NOT git commit. Print: Ready for review. Run git add / git commit manually.
+
+====================================================================
+END OF PROMPT
+====================================================================

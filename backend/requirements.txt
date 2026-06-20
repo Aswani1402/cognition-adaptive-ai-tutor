@@ -1,0 +1,13 @@
+numpy
+joblib
+scikit-learn==1.7.2
+tensorflow
+torch
+sentence-transformers
+pandas
+matplotlib
+sympy
+fastapi
+uvicorn
+httpx
+python-multipart

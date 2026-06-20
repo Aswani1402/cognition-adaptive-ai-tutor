@@ -1,0 +1,26 @@
+# Final local demo commands
+
+# Backend checks
+python -m scripts.test_behaviour_lstm_runtime
+python -m scripts.test_behaviour_runtime_fallback
+python -m tutor.system.run_integrated_tutor_once --learner_id 14
+python -m scripts.test_answer_submit_behaviour_response
+python -m scripts.test_api_routes_smoke
+
+# Backend FastAPI server
+python -m uvicorn tutor.api.app:app --reload --host 127.0.0.1 --port 8000
+
+# Frontend React app
+Push-Location ..\frontend_ui\KP-UI
+npm install
+npm run dev
+Pop-Location
+
+# Streamlit developer demo
+streamlit run developer_demo\app.py
+
+# CogniTutorLM smoke test
+python -m scripts.test_cognitutor_live_guarded_connector
+
+# Readiness report regeneration
+python -m scripts.evaluation.generate_final_demo_runtime_readiness

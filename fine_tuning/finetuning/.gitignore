@@ -1,0 +1,10 @@
+# ignore database files
+*.db
+Updated_DB/
+
+# python cache
+__pycache__/
+*.pyc
+
+# large folders (do NOT push dataset)
+training_data/
