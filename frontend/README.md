@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../docs/assets/cognitutor-logo.svg" alt="Cognition-Adaptive AI Tutor logo and adaptive learning banner" width="100%">
+</p>
+
 # Frontend
 
 This folder contains the learner-facing interface for the Cognition-Adaptive AI Tutor Personalized Learning System.

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../docs/assets/cognitutor-logo.svg" alt="Cognition-Adaptive AI Tutor logo and adaptive learning banner" width="100%">
+</p>
+
 # LLM From Scratch / CogniTutorLM
 
 This folder contains the CogniTutorLM / tutor language model from scratch work.

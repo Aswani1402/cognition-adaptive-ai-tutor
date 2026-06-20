@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/cognitutor-logo.svg" alt="Cognition-Adaptive AI Tutor logo and adaptive learning banner" width="100%">
+</p>
+
 # Cognition-Adaptive AI Tutor Personalized Learning System
 
 A multi-module cognition-adaptive tutoring framework that personalizes learning using learner mastery, interaction behaviour, mistake evidence, concept dependency, retrieval-grounded content, guarded tutor generation, safe policy-based recommendation, notebook memory, revision support, rewards, explainability, and developer evidence.
@@ -174,6 +178,109 @@ streamlit run app.py
 ```
 
 If the entry file name is different, check `developer_demo/README.md`.
+
+## Screenshots
+
+The screenshots below show the main learner workflow and developer evidence views.
+
+Screenshot files are stored in `docs/screenshots/`.
+
+### Landing Page
+
+![Landing Page](docs/screenshots/front_page.png)
+
+### Register and Login
+
+![Register](docs/screenshots/register.png)
+
+![Login](docs/screenshots/login.png)
+
+### Learner Dashboard
+
+![Learner Dashboard](docs/screenshots/Dashboard.png)
+
+### Guided Lesson
+
+![Guided Lesson](docs/screenshots/guided_lesson.png)
+
+### Dynamic Assessment
+
+![Dynamic Assessment](docs/screenshots/Assesment_true_false.png)
+
+### Answer Feedback and Evaluation
+
+![Answer Feedback](docs/screenshots/feedback_interface.png)
+
+### Learning Path
+
+![Learning Path](docs/screenshots/path.png)
+
+### Notebook Memory and Revision
+
+![Notebook Memory](docs/screenshots/Notebook.png)
+
+### Flashcards and Mindmap
+
+![Flashcards](docs/screenshots/flashcard.png)
+
+![Mindmap](docs/screenshots/mindmap.png)
+
+### Doubt Support
+
+![Doubt Support](docs/screenshots/doubt.png)
+
+### Mistakes and Weakness Review
+
+![Mistakes and Weakness](docs/screenshots/Mistake.png)
+
+### Rewards and Momentum
+
+![Rewards](docs/screenshots/Rewards.png)
+
+### Developer Evidence Trace
+
+![Developer Evidence Trace](docs/screenshots/overview_trace.png)
+
+### Developer Assessment Evidence
+
+![Developer Assessment Evidence](docs/screenshots/assesmnet_demo.png)
+
+### Developer Notebook Revision Evidence
+
+![Developer Notebook Revision Evidence](docs/screenshots/demo_notebook.png)
+
+### Safe Code Runner
+
+![Safe Code Runner](docs/screenshots/code.png)
+
+### Evaluation Chart
+
+![EdNet ROC Curve](docs/screenshots/ednet_roc_curve.png)
+
+### Suggested Screenshot File Names
+
+```text
+docs/screenshots/
+├── front_page.png
+├── register.png
+├── login.png
+├── Dashboard.png
+├── guided_lesson.png
+├── Assesment_true_false.png
+├── assesmnet_demo.png
+├── feedback_interface.png
+├── path.png
+├── Notebook.png
+├── flashcard.png
+├── mindmap.png
+├── doubt.png
+├── Mistake.png
+├── Rewards.png
+├── overview_trace.png
+├── demo_notebook.png
+├── code.png
+└── ednet_roc_curve.png
+```
 
 ## Evaluation Summary
 

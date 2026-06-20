@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../docs/assets/cognitutor-logo.svg" alt="Cognition-Adaptive AI Tutor logo and adaptive learning banner" width="100%">
+</p>
+
 # Fine Tuning and Pretrained Model Comparison
 
 This folder contains fine-tuning and pretrained model comparison experiments for the Cognition-Adaptive AI Tutor project.

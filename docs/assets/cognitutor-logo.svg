@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-labelledby="title desc">
+  <title id="title">Cognition-Adaptive AI Tutor logo</title>
+  <desc id="desc">A polished banner showing a brain, book, adaptive path nodes, and AI tutor signal lines.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#102a43"/>
+      <stop offset="0.45" stop-color="#1f4e5f"/>
+      <stop offset="1" stop-color="#2f6f73"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#70e1d4"/>
+      <stop offset="1" stop-color="#ffd166"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#06131f" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="360" rx="34" fill="url(#bg)"/>
+
+  <g opacity="0.18" fill="none" stroke="#d9fff9" stroke-width="2">
+    <path d="M65 285 C205 190, 288 310, 410 210 S630 80, 760 160 1015 280, 1210 95"/>
+    <path d="M110 90 C260 140, 355 25, 505 80 S735 225, 900 155 1070 85, 1190 180"/>
+  </g>
+
+  <g transform="translate(105 70)" filter="url(#shadow)">
+    <rect x="0" y="54" width="210" height="144" rx="22" fill="#f7fafc"/>
+    <path d="M26 74 h73 c21 0 36 13 36 32 v88 c-10-11-24-17-42-17H26z" fill="#d9fff9"/>
+    <path d="M184 74 h-73 c-21 0-36 13-36 32 v88 c10-11 24-17 42-17h67z" fill="#fff3cf"/>
+    <path d="M105 80 v110" stroke="#2f6f73" stroke-width="6" stroke-linecap="round"/>
+
+    <g transform="translate(54 -6)">
+      <path d="M83 31c-18-24-55-13-58 18-29 5-32 48-5 60-6 31 31 53 56 33 28 25 72 3 65-35 30-15 21-61-12-65-8-28-39-33-46-11z" fill="url(#accent)"/>
+      <path d="M55 58c19-8 38 2 40 22M82 35c9 18 4 35-12 47M105 62c-18 6-25 20-21 41M45 104c18-6 36 1 45 17M111 103c-16-10-30-8-43 5" fill="none" stroke="#102a43" stroke-width="7" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(365 85)">
+    <text x="0" y="42" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="800" fill="#ffffff">Cognition-Adaptive AI Tutor</text>
+    <text x="0" y="90" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#d9fff9">Personalized learning with learner modelling, guarded generation, RAG, revision, rewards, and XAI</text>
+
+    <g transform="translate(0 137)">
+      <g fill="#ffffff" opacity="0.96">
+        <circle cx="24" cy="24" r="14"/>
+        <circle cx="170" cy="24" r="14"/>
+        <circle cx="316" cy="24" r="14"/>
+        <circle cx="462" cy="24" r="14"/>
+        <circle cx="608" cy="24" r="14"/>
+      </g>
+      <g stroke="#ffd166" stroke-width="6" stroke-linecap="round">
+        <path d="M42 24h110"/>
+        <path d="M188 24h110"/>
+        <path d="M334 24h110"/>
+        <path d="M480 24h110"/>
+      </g>
+      <g font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff">
+        <text x="0" y="65">Teach</text>
+        <text x="137" y="65">Assess</text>
+        <text x="278" y="65">Diagnose</text>
+        <text x="426" y="65">Adapt</text>
+        <text x="570" y="65">Explain</text>
+      </g>
+    </g>
+  </g>
+
+  <g transform="translate(1015 92)" filter="url(#shadow)">
+    <rect x="0" y="0" width="170" height="170" rx="30" fill="#ffffff" opacity="0.95"/>
+    <path d="M42 116c18-41 45-67 87-76" fill="none" stroke="#2f6f73" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="42" cy="116" r="15" fill="#70e1d4"/>
+    <circle cx="86" cy="74" r="15" fill="#ffd166"/>
+    <circle cx="129" cy="40" r="15" fill="#70e1d4"/>
+    <path d="M52 128h79" stroke="#102a43" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>

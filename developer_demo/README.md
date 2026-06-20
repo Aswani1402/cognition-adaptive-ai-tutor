@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../docs/assets/cognitutor-logo.svg" alt="Cognition-Adaptive AI Tutor logo and adaptive learning banner" width="100%">
+</p>
+
 # Developer Demo and Reviewer Evidence
 
 This folder contains developer/reviewer demo tools for inspecting the Cognition-Adaptive AI Tutor system.
